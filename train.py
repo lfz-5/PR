@@ -70,7 +70,7 @@ for epoch in range(EPOCHES):
         with torch.no_grad():
             label = Variable(label)
 
-        out = model(img)
+        out = model(img).to(device)
 
         loss = criterion(out, label)
         eval_loss += loss.item() * label.size(0)
