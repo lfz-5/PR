@@ -9,8 +9,8 @@ from tqdm import tqdm
 from VGG_16_model import VGG_16
 
 #定义学习速率
-BATCH_SIZE = 128
-LEARNING_RATE = 0.001
+BATCH_SIZE = 256
+LEARNING_RATE = 0.005
 EPOCHES = 10
 
 # 下载训练集 CIFAR-10 10分类训练集
