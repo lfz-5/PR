@@ -21,7 +21,7 @@ test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 #实例化
-model = VGG_16()
+model = VGG_16().to(device)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adagrad(model.parameters(), lr=LEARNING_RATE)
@@ -33,8 +33,8 @@ for epoch in range(EPOCHES):
     running_acc = 0.0
     for i, data in tqdm(enumerate(train_loader, 0)):
         img, label = data
-        img = Variable(img)
-        label = Variable(label)
+        img = Variable(img).to(device)
+        label = Variable(label).to(device)
 
         #向前传播
         out = model(img)
