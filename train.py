@@ -65,9 +65,10 @@ for epoch in range(EPOCHES):
     # 测试模型
     for data in test_loader:      
         img, label = data
-
-        img = Variable(img, volatile=True)
-        label = Variable(label, volatile=True)
+        with torch.no_grad():
+            img = Variable(img)
+        with torch.no_grad():
+            label = Variable(label)
 
         out = model(img)
 
