@@ -66,9 +66,9 @@ for epoch in range(EPOCHES):
     for data in test_loader:      
         img, label = data
         with torch.no_grad():
-            img = Variable(img)
+            img = Variable(img).to(device)
         with torch.no_grad():
-            label = Variable(label)
+            label = Variable(label).to(device)
 
         out = model(img).to(device)
 
