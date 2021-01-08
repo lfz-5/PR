@@ -15,7 +15,7 @@ LEARNING_RATE = 0.001
 EPOCHES = 30
 
 transform = transforms.Compose(
-        [transforms.resize([224,224]),
+        [transforms.Resize([224,224]),
          transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 # 下载训练集 CIFAR-10 10分类训练集
