@@ -25,7 +25,7 @@ class VGG_16(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(True), 
             SEModule(channels=64),
-            nn.MaxPool2d(kernel_size = 2, stride = 2),
+            #nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #第三层 卷积层
             nn.Conv2d(64, 128, kernel_size = 3, padding = 1), 
@@ -70,7 +70,7 @@ class VGG_16(nn.Module):
             nn.Conv2d(512,512,kernel_size=3,padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(True),
-            SEModule(channels=512),
+            # SEModule(channels=512),
             nn.MaxPool2d(kernel_size=2,stride=2),
 
             #第十一层 卷积层
@@ -93,7 +93,7 @@ class VGG_16(nn.Module):
 
         self.classifier = nn.Sequential(
             #第十四层 
-            nn.Linear(512*7*7,4096),
+            nn.Linear(2048,4096),
             nn.ReLU(True),
             nn.Dropout(),
 
@@ -113,5 +113,5 @@ class VGG_16(nn.Module):
         out = self.classifier(out)
         return out
 
-model=VGG_16().to("cpu")
-print(model)
+# model=VGG_16().to("cpu")
+# print(model)

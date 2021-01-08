@@ -21,6 +21,7 @@ test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 #实例化
+# device = "cpu"
 model = VGG_16().to(device)
 
 criterion = nn.CrossEntropyLoss()
