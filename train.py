@@ -5,6 +5,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision import datasets
+from torchvision.transforms.functional import resize
 from tqdm import tqdm
 from VGG_16_model import VGG_16
 
@@ -13,15 +14,19 @@ BATCH_SIZE = 32
 LEARNING_RATE = 0.001
 EPOCHES = 30
 
+transform = transforms.Compose(
+        [transforms.resize([224,224]),
+         transforms.ToTensor(),
+         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 # 下载训练集 CIFAR-10 10分类训练集
-train_dataset = datasets.CIFAR10('./data', train=True, transform=transforms.ToTensor(), download=True)
+train_dataset = datasets.CIFAR10('./data', train=True, transform=transform, download=True)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-test_dataset = datasets.CIFAR10('./data', train=False, transform=transforms.ToTensor(), download=True)
+test_dataset = datasets.CIFAR10('./data', train=False, transform=transform, download=True)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 #实例化
-# device = "cpu"
+#device = "cpu"
 model = VGG_16().to(device)
 
 criterion = nn.CrossEntropyLoss()
