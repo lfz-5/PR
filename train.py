@@ -11,7 +11,7 @@ from tqdm import tqdm
 from VGG_16_model import VGG_16
 
 #定义学习速率
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 LEARNING_RATE = 0.001
 EPOCHES = 30
 
@@ -27,7 +27,7 @@ test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 #实例化
-#device = "cpu"
+# device = "cpu"
 model = VGG_16().to(device)
 writer = SummaryWriter('runs/cifar')
 init_img = torch.zeros((1, 3, 224, 224), device=device)
@@ -82,7 +82,7 @@ for epoch in range(EPOCHES):
         with torch.no_grad():
             label = Variable(label).to(device)
 
-        out = model(img).to(device)
+        out = model(img)
 
         loss = criterion(out, label)
         eval_loss += loss.item() * label.size(0)

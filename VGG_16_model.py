@@ -94,17 +94,18 @@ class VGG_16(nn.Module):
 
         self.classifier = nn.Sequential(
             #第十四层 
-            nn.Linear(512*7*7,4096),
+            #nn.Linear(512*7*7,4096),
+            nn.Conv2d(512*7*7,4096,kernel_size=7,stride=1),
             nn.ReLU(True),
-            nn.Dropout(),
+            nn.Dropout(p=0.5),
 
             #第十五层
-            nn.Linear(4096, 4096),
+            nn.Conv2d(4096,4096,kernel_size=1,stride=1),
             nn.ReLU(True),
-            nn.Dropout(),
+            nn.Dropout(p=0.5),
 
             #第十六层
-            nn.Linear(4096,num_classes),
+            nn.Conv2d(4096,num_classes,kernel_size=1,stride=1),
             
         )
 
