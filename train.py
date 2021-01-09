@@ -11,14 +11,16 @@ from tqdm import tqdm
 from VGG_16_model import VGG_16
 
 #定义学习速率
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 LEARNING_RATE = 0.001
 EPOCHES = 30
 
 transform = transforms.Compose(
-        [transforms.Resize([224,224]),
+        [transforms.Resize([128,128]),
+         transforms.RandomHorizontalFlip(),
          transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
 # 下载训练集 CIFAR-10 10分类训练集
 train_dataset = datasets.CIFAR10('./data', train=True, transform=transform, download=True)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
@@ -26,6 +28,7 @@ test_dataset = datasets.CIFAR10('./data', train=False, transform=transform, down
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
+
 #实例化
 # device = "cpu"
 model = VGG_16().to(device)
@@ -46,7 +49,7 @@ for epoch in range(EPOCHES):
         label = Variable(label).to(device)
 
         #向前传播
-        out = model(img)
+        out = model(img).to(device)
 
         #计算损失函数
         loss = criterion(out, label)
@@ -82,7 +85,7 @@ for epoch in range(EPOCHES):
         with torch.no_grad():
             label = Variable(label).to(device)
 
-        out = model(img)
+        out = model(img).to(device)
 
         loss = criterion(out, label)
         eval_loss += loss.item() * label.size(0)
