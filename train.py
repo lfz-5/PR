@@ -15,26 +15,29 @@ BATCH_SIZE = 32
 LEARNING_RATE = 0.001
 EPOCHES = 30
 
-transform = transforms.Compose(
-        [transforms.RandomCrop(32,4),
-         transforms.RandomHorizontalFlip(),
-         transforms.ToTensor(),
-         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+data_transform = {
+        "train": transforms.Compose([transforms.RandomResizedCrop(224),
+                                     transforms.RandomHorizontalFlip(),
+                                     transforms.ToTensor(),
+                                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
+        "test": transforms.Compose([transforms.Resize((224, 224)),
+                                   transforms.ToTensor(),
+                                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])}
 
 # 下载训练集 CIFAR-10 10分类训练集
-train_dataset = datasets.CIFAR10('./data', train=True, transform=transform, download=True)
+train_dataset = datasets.CIFAR10('./data', train=True, transform=data_transform["train"], download=True)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-test_dataset = datasets.CIFAR10('./data', train=False, transform=transforms.ToTensor(), download=True)
+test_dataset = datasets.CIFAR10('./data', train=False, transform=data_transform["test"], download=True)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 #实例化
-# device = "cpu"
+device = "cpu"
 print(device)
 model = VGG_16().to(device)
-writer = SummaryWriter('runs/cifar')
-init_img = torch.zeros((1, 3, 32, 32), device=device)
+writer = SummaryWriter('runs/')
+init_img = torch.zeros((1, 3, 224, 224), device=device)
 writer.add_graph(model,init_img)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adagrad(model.parameters(), lr=LEARNING_RATE)

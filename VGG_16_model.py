@@ -24,7 +24,7 @@ class VGG_16(nn.Module):
             nn.Conv2d(64, 64, kernel_size = 3, padding = 1),
             nn.BatchNorm2d(64),
             nn.ReLU(True), 
-            # SEModule(channels=64),
+            SEModule(channels=64),
             nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #第三层 卷积层
@@ -36,7 +36,7 @@ class VGG_16(nn.Module):
             nn.Conv2d(128, 128, kernel_size = 3, padding = 1), 
             nn.BatchNorm2d(128),
             nn.ReLU(True),
-            # SEModule(channels=128),
+            SEModule(channels=128),
             nn.MaxPool2d(kernel_size = 2, stride = 2),
 
             #第五层 卷积层
@@ -53,7 +53,7 @@ class VGG_16(nn.Module):
             nn.Conv2d(256,256,kernel_size=3,padding=1),
             nn.BatchNorm2d(256),
             nn.ReLU(True),
-            # SEModule(channels=256),
+            SEModule(channels=256),
             nn.MaxPool2d(kernel_size=2,stride=2),
 
             #第八层 卷积层
@@ -70,7 +70,7 @@ class VGG_16(nn.Module):
             nn.Conv2d(512,512,kernel_size=3,padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(True),
-            # SEModule(channels=512),
+            SEModule(channels=512),
             nn.MaxPool2d(kernel_size=2,stride=2),
 
             #第十一层 卷积层
@@ -87,25 +87,25 @@ class VGG_16(nn.Module):
             nn.Conv2d(512,512,kernel_size=3,padding=1),
             nn.BatchNorm2d(512),
             nn.ReLU(True),
-            # SEModule(channels=512),
+            SEModule(channels=512),
             nn.MaxPool2d(kernel_size=2,stride=2),
             )
 
         self.classifier = nn.Sequential(
             #第十四层 
             nn.Dropout(p=0.5),
-            nn.Linear(512,512),
+            nn.Linear(512*7*7,4096),
             # nn.Conv2d(512*7*7,4096,kernel_size=1,stride=1),
             nn.ReLU(True),
             
             #第十五层
             nn.Dropout(p=0.5),
-            nn.Linear(512,512),
+            nn.Linear(4096,4096),
             # nn.Conv2d(4096,4096,kernel_size=1,stride=1),
             nn.ReLU(True),
             
             #第十六层
-            nn.Linear(512,num_classes),
+            nn.Linear(4096,num_classes),
             # nn.Conv2d(4096,num_classes,kernel_size=1,stride=1),
             
         )
