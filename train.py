@@ -16,7 +16,7 @@ LEARNING_RATE = 0.001
 EPOCHES = 30
 
 transform = transforms.Compose(
-        [transforms.Resize([128,128]),
+        [transforms.RandomResizedCrop(224),
          transforms.RandomHorizontalFlip(),
          transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
