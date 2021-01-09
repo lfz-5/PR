@@ -27,10 +27,11 @@ train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 test_dataset = datasets.CIFAR10('./data', train=False, transform=transforms.ToTensor(), download=True)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(device)
+
 
 #实例化
-device = "cpu"
+# device = "cpu"
+print(device)
 model = VGG_16().to(device)
 writer = SummaryWriter('runs/cifar')
 init_img = torch.zeros((1, 3, 32, 32), device=device)
