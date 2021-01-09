@@ -16,7 +16,7 @@ LEARNING_RATE = 0.001
 EPOCHES = 30
 
 transform = transforms.Compose(
-        [transforms.RandomResizedCrop(224),
+        [transforms.RandomCrop(32,4),
          transforms.RandomHorizontalFlip(),
          transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -24,16 +24,16 @@ transform = transforms.Compose(
 # 下载训练集 CIFAR-10 10分类训练集
 train_dataset = datasets.CIFAR10('./data', train=True, transform=transform, download=True)
 train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-test_dataset = datasets.CIFAR10('./data', train=False, transform=transform, download=True)
+test_dataset = datasets.CIFAR10('./data', train=False, transform=transforms.ToTensor(), download=True)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 
 #实例化
-# device = "cpu"
+device = "cpu"
 model = VGG_16().to(device)
 writer = SummaryWriter('runs/cifar')
-init_img = torch.zeros((1, 3, 224, 224), device=device)
+init_img = torch.zeros((1, 3, 32, 32), device=device)
 writer.add_graph(model,init_img)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adagrad(model.parameters(), lr=LEARNING_RATE)
@@ -69,7 +69,7 @@ for epoch in range(EPOCHES):
 
     print('Finish {} epoch, Loss: {:.6f}, Acc: {:.6f}'.format(
         epoch + 1, running_loss / (len(train_dataset)), running_acc / (len(train_dataset))))
-    writer.add_scalar('training loss',running_loss / (len(train_dataset)),epoch)
+    writer.add_scalar('train_loss',running_loss / (len(train_dataset)),epoch)
     writer.add_scalar('train_accuracy',running_acc / (len(train_dataset)),epoch)
     writer.add_scalar('learning_rate',optimizer.param_groups[0]["lr"], epoch)
 
@@ -99,7 +99,7 @@ for epoch in range(EPOCHES):
         test_dataset)), eval_acc / (len(test_dataset))))
     print()
     writer.add_scalar('test_loss',eval_loss / (len(test_dataset)),epoch)
-    writer.add_scalar('train_accuracy',eval_acc / (len(test_dataset)),epoch)
+    writer.add_scalar('test_accuracy',eval_acc / (len(test_dataset)),epoch)
     
 # 保存模型
 torch.save(model.state_dict(), './model.pkl')
