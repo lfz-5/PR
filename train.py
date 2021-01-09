@@ -3,10 +3,11 @@ import torch.nn as nn
 from torch import optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-from torchvision import transforms
-from torchvision import datasets
+from torch.utils.tensorboard import SummaryWriter
+from torchvision import datasets, transforms
 from torchvision.transforms.functional import resize
 from tqdm import tqdm
+
 from VGG_16_model import VGG_16
 
 #定义学习速率
@@ -28,7 +29,9 @@ print(device)
 #实例化
 #device = "cpu"
 model = VGG_16().to(device)
-
+writer = SummaryWriter('runs/cifar')
+init_img = torch.zeros((1, 3, 224, 224), device=device)
+writer.add_graph(model,init_img)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adagrad(model.parameters(), lr=LEARNING_RATE)
 
@@ -63,6 +66,9 @@ for epoch in range(EPOCHES):
 
     print('Finish {} epoch, Loss: {:.6f}, Acc: {:.6f}'.format(
         epoch + 1, running_loss / (len(train_dataset)), running_acc / (len(train_dataset))))
+    writer.add_scalar('training loss',running_loss / (len(train_dataset)),epoch)
+    writer.add_scalar('train_accuracy',running_acc / (len(train_dataset)),epoch)
+    writer.add_scalar('learning_rate',optimizer.param_groups[0]["lr"], epoch)
 
     # 模型评估
     model.eval()   
@@ -89,6 +95,8 @@ for epoch in range(EPOCHES):
     print('Test Loss: {:.6f}, Acc: {:.6f}'.format(eval_loss / (len(
         test_dataset)), eval_acc / (len(test_dataset))))
     print()
-
+    writer.add_scalar('test_loss',eval_loss / (len(test_dataset)),epoch)
+    writer.add_scalar('train_accuracy',eval_acc / (len(test_dataset)),epoch)
+    
 # 保存模型
 torch.save(model.state_dict(), './model.pkl')
