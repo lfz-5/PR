@@ -13,7 +13,7 @@ from VGG_16_model import VGG_16
 #定义学习速率
 BATCH_SIZE = 32
 LEARNING_RATE = 0.001
-EPOCHES = 30
+EPOCHES = 50
 
 data_transform = {
         "train": transforms.Compose([transforms.RandomResizedCrop(224),
@@ -36,7 +36,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #device = "cpu"
 print(device)
 model = VGG_16().to(device)
-writer = SummaryWriter('runs/')
+writer = SummaryWriter('runs/epoch50')
 init_img = torch.zeros((1, 3, 224, 224), device=device)
 writer.add_graph(model,init_img)
 criterion = nn.CrossEntropyLoss()
