@@ -115,7 +115,7 @@ def train(epoch):
         #progress_bar(batch_idx, len(trainloader), 'Train Loss: %.3f | Train Acc: %.3f%% (%d/%d)'
          #            % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
     print('Train Loss: %.3f | Train Acc: %.3f%% (%d/%d)'
-                   % (train_loss/(len(trainset))), 100.*correct/total, correct, total)
+                   % ((train_loss/(len(trainset))), 100.*correct/total, correct, total))
     writer.add_scalar('train_loss',(train_loss/(len(trainset))),epoch)
     writer.add_scalar('train_accuracy',(correct/total),epoch)
     writer.add_scalar('learning_rate',optimizer.param_groups[0]["lr"], epoch)
@@ -141,7 +141,7 @@ def test(epoch):
             #progress_bar(batch_idx, len(testloader), 'Test Loss: %.3f | Test Acc: %.3f%% (%d/%d)'
                         # % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
     print('Test Loss: %.3f | Test Acc: %.3f%% (%d/%d)'
-                   % (test_loss/(len(trainset))), 100.*correct/total, correct, total)            
+                   % ((test_loss/(len(trainset))), 100.*correct/total, correct, total)  )          
     writer.add_scalar('test_loss',(test_loss/(len(testset))),epoch)
     writer.add_scalar('train_accuracy',(correct/total),epoch)
     # Save checkpoint.
