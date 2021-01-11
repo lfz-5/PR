@@ -77,7 +77,7 @@ if __name__ == "__main__":
     print('Finish {} epoch, Loss: {:.6f}, Acc: {:.6f}'.format(
         epoch + 1, running_loss / (len(trainset)), running_acc / (len(trainset))))
     writer.add_scalar('train_loss',running_loss / (len(trainset)),epoch)
-    writer.add_scalar('train_accuracy',running_acc / (len(train=set)),epoch)
+    writer.add_scalar('train_accuracy',running_acc / (len(trainset)),epoch)
     writer.add_scalar('learning_rate',optimizer.param_groups[0]["lr"], epoch)    
 
         # 模型评估
