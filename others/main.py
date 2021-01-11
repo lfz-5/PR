@@ -10,7 +10,7 @@ import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
 import os
 import argparse
-
+from tqdm import tqdm
 from models import *
 from utils import progress_bar
 
@@ -99,7 +99,7 @@ def train(epoch):
     train_loss = 0
     correct = 0
     total = 0
-    for batch_idx, (inputs, targets) in enumerate(trainloader):
+    for batch_idx, (inputs, targets) in tqdm(enumerate(trainloader)):
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = net(inputs)
@@ -112,8 +112,10 @@ def train(epoch):
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
 
-        progress_bar(batch_idx, len(trainloader), 'Train Loss: %.3f | Train Acc: %.3f%% (%d/%d)'
-                     % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+        #progress_bar(batch_idx, len(trainloader), 'Train Loss: %.3f | Train Acc: %.3f%% (%d/%d)'
+         #            % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+    print('Train Loss: %.3f | Train Acc: %.3f%% (%d/%d)'
+                   % (train_loss/(len(trainset))), 100.*correct/total, correct, total)
     writer.add_scalar('train_loss',(train_loss/(len(trainset))),epoch)
     writer.add_scalar('train_accuracy',(correct/total),epoch)
     writer.add_scalar('learning_rate',optimizer.param_groups[0]["lr"], epoch)
@@ -126,7 +128,7 @@ def test(epoch):
     correct = 0
     total = 0
     with torch.no_grad():
-        for batch_idx, (inputs, targets) in enumerate(testloader):
+        for batch_idx, (inputs, targets) in tqdm(enumerate(testloader)):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = net(inputs)
             loss = criterion(outputs, targets)
@@ -136,8 +138,10 @@ def test(epoch):
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
-            progress_bar(batch_idx, len(testloader), 'Test Loss: %.3f | Test Acc: %.3f%% (%d/%d)'
-                         % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
+            #progress_bar(batch_idx, len(testloader), 'Test Loss: %.3f | Test Acc: %.3f%% (%d/%d)'
+                        # % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
+    print('Test Loss: %.3f | Test Acc: %.3f%% (%d/%d)'
+                   % (test_loss/(len(trainset))), 100.*correct/total, correct, total)            
     writer.add_scalar('test_loss',(test_loss/(len(testset))),epoch)
     writer.add_scalar('train_accuracy',(correct/total),epoch)
     # Save checkpoint.
