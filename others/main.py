@@ -114,9 +114,9 @@ def train(epoch):
 
         progress_bar(batch_idx, len(trainloader), 'Train Loss: %.3f | Train Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
-    # writer.add_scalar('train_loss',(train_loss/(len(trainset))),epoch)
-    # writer.add_scalar('train_accuracy',(correct/total),epoch)
-    # writer.add_scalar('learning_rate',optimizer.param_groups[0]["lr"], epoch)
+    writer.add_scalar('train_loss',(train_loss/(len(trainset))),epoch)
+    writer.add_scalar('train_accuracy',(correct/total),epoch)
+    writer.add_scalar('learning_rate',optimizer.param_groups[0]["lr"], epoch)
 
 
 def test(epoch):
@@ -138,7 +138,8 @@ def test(epoch):
 
             progress_bar(batch_idx, len(testloader), 'Test Loss: %.3f | Test Acc: %.3f%% (%d/%d)'
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
-
+    writer.add_scalar('test_loss',(test_loss/(len(testset))),epoch)
+    writer.add_scalar('train_accuracy',(correct/total),epoch)
     # Save checkpoint.
     acc = 100.*correct/total
     if acc > best_acc:
@@ -155,7 +156,8 @@ def test(epoch):
 
 
 for epoch in range(start_epoch, start_epoch+260):
-    scheduler.step()
+    
     train(epoch)
     test(epoch)
+    scheduler.step()
     
