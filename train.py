@@ -36,7 +36,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 #device = "cpu"
 print(device)
 model = VGG_16().to(device)
-writer = SummaryWriter('runs/epoch50')
+writer = SummaryWriter()
 init_img = torch.zeros((1, 3, 224, 224), device=device)
 writer.add_graph(model,init_img)
 criterion = nn.CrossEntropyLoss()
