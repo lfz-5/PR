@@ -143,7 +143,7 @@ def test(epoch):
     print('Test Loss: %.3f | Test Acc: %.3f%% (%d/%d)'
                    % ((test_loss/(len(trainset))), 100.*correct/total, correct, total)  )          
     writer.add_scalar('test_loss',(test_loss/(len(testset))),epoch)
-    writer.add_scalar('train_accuracy',(correct/total),epoch)
+    writer.add_scalar('test_accuracy',(correct/total),epoch)
     # Save checkpoint.
     acc = 100.*correct/total
     if acc > best_acc:
